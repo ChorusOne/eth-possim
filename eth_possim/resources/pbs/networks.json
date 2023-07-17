@@ -1,0 +1,7 @@
+{
+    "possim":{
+        "GenesisForkVersion": "{{ cfg.cl.genesis_fork_version }}",
+        "GenesisValidatorsRoot":"__GENESISROOT__",
+        "BellatrixForkVersion": "{{ cfg.cl.bellatrix_fork_version }}"
+    }
+}

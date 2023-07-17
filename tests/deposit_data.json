@@ -1,0 +1,34 @@
+{
+  "deposit_data": [
+    {
+      "amount": 32000000000,
+      "deposit_cli_version": "2.3.0",
+      "deposit_data_root": "f49a2e57166b06845e583a272c95f3f1c1393115756317cb3c53e789d7cee61f",
+      "deposit_message_root": "059f2d8fd0c92c4981fcca9ef5d42f8a37bd40925907f49250079a1036ee1958",
+      "fork_version": "00000001",
+      "network_name": "minimal",
+      "pubkey": "8ffd1a608c0d602ddf6dab80ef97d91b5eeed7cece7830934225fceacad5f2d1f156cc459ce22800c52182c03f106c4b",
+      "signature": "9872c313fa7b2d41f0ee8472bb343ed830d2b9c601091cd193d06d7fa44372086251eec6248b94ac7e63c74b99d6e53808916e2e6a86c6eddcf2e6bafc936bb07801da1e602ee4e45a605a9532f86d32e8954d76f5083cf11b701860a3a0c84b",
+      "withdrawal_credentials": "00ae83230328042d19d49f416478dacbf3450479dba5a5283efcb1566ee1a3c4"
+    },
+    {
+      "amount": 32000000000,
+      "deposit_cli_version": "2.3.0",
+      "deposit_data_root": "bd80c75d8650c61cc6e5cd0054c01a8a60b47fbdc2f47c991f872574315cd437",
+      "deposit_message_root": "386fbb9c5ea4e2c4bb67bc5ac09e1a4ea8f4a92e8a49725bea032c500083fcfa",
+      "fork_version": "00000001",
+      "network_name": "minimal",
+      "pubkey": "a0cfc8c9bbed62b5f8b4202fff8227852a36a9128fbffeeb9cda1f08ab9ed78d69a29d15e8c591bf12849d9e648952a9",
+      "signature": "967434097f7aeabf92207a02d70a9d841fd43b35964b5a28db026f34518032ebc5a706a0d0301daf6185487331f86fdb17d0dd48d6118cde5dabf7ef3f8635d8fab5b3c1331f8259b113088913b508730b0c5548163fd5efde23ae18cc297b88",
+      "withdrawal_credentials": "00ad75e8a1786f605cd0ef62df76097dda6c28c88c9ac2808be75bd7c79bf4e9"
+    }
+  ],
+  "keystores": [],
+  "mnemonic": {
+    "seed": "robust utility rule member fan mix salute tooth myth song broken glass future scissors answer chest grid remember better board orbit eyebrow barely scrap"
+  },
+  "private_keys": [
+    "663e11043f98c09c4d3356b267da90a037d5dd9106a15018d59fb0d784a21796",
+    "0cc8f2e485057b39aa817cb2dc8b936d5172f663287f122cda06a61b04728bd9"
+  ]
+}

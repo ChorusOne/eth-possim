@@ -1,0 +1,23 @@
+name: CI
+
+# This workflow run tests and build for each push
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest-16-cores
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build Ethereum PoS simulator
+        run: |
+          docker-compose build possim
+
+      - name: Run Ethereum PoS test suite
+        run: |
+          docker-compose run possim test

@@ -1,0 +1,88 @@
+port:
+  # EL
+  geth_rpc: 18544
+  geth_wsrpc: 8546
+  explorer_el: 4000
+
+  #CL
+  beacon_api: 15050
+  lh_api: 15151
+  teku_api: 15051
+  explorer_cl: 4001
+
+  # Others
+  deposit: 9009
+  faucet: 8593
+
+el:
+  chain_id: 4242
+  chain_name: privatenet
+  signer_password: 1DVjHoc1AyrdAmlsb-xGu_ptaG5DBRjOdv6bfUumaqo
+
+  bootnode_key: 02fd74636e96a8ffac8e7b01b0de8dea94d6bcf4989513b38cf59eb32163ff91
+  # bootnode -nodekeyhex 02fd74636e96a8ffac8e7b01b0de8dea94d6bcf4989513b38cf59eb32163ff91 -writeaddres
+  bootnode_enode: 51ea9bb34d31efc3491a842ed13b8cab70e753af108526b57916d716978b380ed713f4336a80cdb85ec2a115d5a8c0ae9f3247bed3c84d3cb025c6bab311062c
+  
+  verbosity: 3
+
+  funder:
+    address: "0x876668ff34ab02ec9680feab0a788e84f3a8e299"
+    balance: "100000000000000000000000"
+    enode: "3c3aa6eb1df9b32806932f894d2c82f240f6bd670edcc567404ae6b8c1aa7c44c634b177af264d2c258e67d69e04d2c1808fe8611d9f61fe1ff3ee5604ca7dcf"
+    key: "7b4c45210f63a2eb66b4f8c8b9798c03fc8e0a947b80a84a86797ea04d9e1fa5"
+    keystore: "UTC--2022-09-09T15-37-18.196933928Z--876668ff34ab02ec9680feab0a788e84f3a8e299"
+    private_key: "3a4f6ed49ea1a5d92ae23403af3b6a29e8618614372732c6c98443ef36ef899a"
+
+  geth_node:
+
+    - address: "0x49011adbcc3bc9c0307bb07f37dda1a1a9c69d2e"
+      balance: "100000000000000000000000"
+      enode: "173401f923ccd140b7f699ccbcdcd4f1e472151e807bebdf8f8e8f3d49a7170c7bb49827762707717b9b85d7c08041d1ccb04718ea7c445f725371c6e1509f39"
+      key: "0c4de00a27b16091620ec324123ebd1b941038e2e73f462c9fa146f71f90d5d3"
+      keystore: "UTC--2022-08-23T13-16-49.458495342Z--49011adbcc3bc9c0307bb07f37dda1a1a9c69d2e"
+      private_key: "739ffe90acd85af2e75f5384d8c3d248a92d3ddc2ce679e6a1c04314630cb282"
+
+    - address: "0x86088e75af34b93afeff60f0f380e339f60b38ed"
+      balance: "100000000000000000000000"
+      enode: "710a18c5e88ef9d0b3e31315e3da4ab37de0a3b6df1c8909b3002f4505edb7a881b70709b3b30588feb1e1e3a1f4ae47b2d6e7ecf93379e5abac51704d5cf0bf"
+      key: "979a113d43b3b265d30610f9bbd6828763cd4e471ba7f48b07d1911ef814e025"
+      keystore: "UTC--2022-11-09T15-31-08.954619000Z--86088e75af34b93afeff60f0f380e339f60b38ed"
+      private_key: "84a065e45e988b9ed387dd7ad5e47871f5f2cc584a73447d376c86bcfa959418"
+
+    # For use with next client integration
+    # - address: "0xbcca35be2dd5fb749e82b3b95a40262d543fe7e4"
+    #   balance: "100000000000000000000000"
+    #   enode: "4b1a1bd0a0d36b6d54c6610ed752a4115a3477236ca645c153e005222bdc6da021d8302aad92326c704d8958d7e3168ee373084b4a845bcf6f1f3a173a568730"
+    #   key: "7bbf45dec8fcb4dfda551493b8d8a5c9d50b9eef3963eb793986121ffdd0670c"
+    #   keystore: "UTC--2022-11-09T15-30-34.048122000Z--bcca35be2dd5fb749e82b3b95a40262d543fe7e4"
+    #   private_key: "6f27af57703842f845dac9aa87c48e29b9cb70be4235024e0808fe71a44bb66f"
+
+  mev_builder_node:
+
+    - address: "0x5D0fb6Af7FB39AC9A9314Cc3FC2974c325B95c5A"
+      balance: "100000000000000000000000"
+      enode: "c636515b084e5dcfb39c0e00e3d0dd5b5c4ba7c04d9a4adc3aad4eea6ab25561f0fa09fce119e2aebdcfa34d02a3c8f551b814e31df6940fa937f16e0624fc40"
+      key: "59233b25bfa4c214a8713e07a395a5d11478de10f36c6c80ba5369541f73bc44"
+      keystore: "UTC--2023-01-31T11-06-39.729391000Z--5d0fb6af7fb39ac9a9314cc3fc2974c325b95c5a"
+      private_key: "e59ebc99a647c5849bb31c79f0bdc79c7ba5fd92631c32ee16e9e2e7fc5087cf"
+      relay_secret_key: "0x2e0834786285daccd064ca17f1654f67b4aef298acbb82cef9ec422fb4975622"
+      secret_key: "0x2e0834786285daccd064ca17f1654f67b4aef298acbb82cef9ec422fb4975622"
+
+cl:
+  genesis_mnemonic: 'toss derive correct twenty chimney rotate rapid movie rib blanket sock salon picnic there lend peasant wealth measure exclude unit adult use october normal'
+
+  lh_node_count: 1
+  teku_node_count: 1
+
+  # This is a dummy value which will be replaced by eth2-testnet-genesis
+  eth1_block_hash: "0000000000000000000000000000000000000000000000000000000000000000"
+  # This is a dummy value which will be replaced by eth2-testnet-genesis (with pre-allocated value from genesis.json)
+  deposit_contract_address: 4242424242424242424242424242424242424242
+
+  debug_level: "info"
+
+pbs:
+  enabled: false
+  # eth-staking-smith new-mnemonic --chain mainnet --num_validators 1
+  relay_public_key: "0xb69e5893e7da48851cfc4de34340774d0033db69f1d704e8b37a429818506557c8c20d5b67d378db8d42d4b6a4689c8f"
+  relay_secret_key: "0x47ad2620b930cec6d5f63dae5e6e45b104568f7d815d43307a41465b42c31591"

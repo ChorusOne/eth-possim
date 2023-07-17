@@ -1,0 +1,28 @@
+[Node.P2P]
+# {%- if cfg.pbs.enabled %}
+MaxPeers = "{{ (cfg.el.geth_node_count) + (cfg.el.mev_builder_node_count) - 1 }}"
+# {%- else %}
+MaxPeers = "{{ (cfg.el.geth_node_count) - 1 }}"
+# {%- endif %}
+NoDiscovery = true
+BootstrapNodes = [
+    "enode://{{ cfg.el.bootnode_enode }}@127.0.0.1:0?discport={{ cfg.el.bootnode.port_rpc }}"
+]
+BootstrapNodesV5 = []
+StaticNodes = [
+    # {%- for peer in cfg.el.geth_node %}
+    # {%- if peer.enode != node.enode %}
+    "enode://{{ peer.enode }}@127.0.0.1:{{ peer.port_p2p }}",
+    # {%- endif %}
+    # {%- endfor %}
+    # {%- if cfg.pbs.enabled %}
+    # {%- for peer in cfg.el.mev_builder_node %}
+    # {%- if peer.enode != node.enode %}
+    "enode://{{ peer.enode }}@127.0.0.1:{{ peer.port_p2p }}",
+    # {%- endif %}
+    # {%- endfor %}
+    # {%- endif %}
+]
+TrustedNodes = []
+ListenAddr = "127.0.0.1:{{ node.port_p2p }}"
+EnableMsgEvents = false
