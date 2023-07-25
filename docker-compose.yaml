@@ -14,7 +14,7 @@ services:
       - ./pbs_config.yaml:/opt/privatenet/pbs_config.yaml
     ports:
       # execution wsrpc
-      - "8546:8546"
+      - "18546:18546"
       # execution rpc
       - "18544:18544"
       # beacon rest
