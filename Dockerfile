@@ -147,11 +147,11 @@ FROM flashbots/mev-boost:${MEV_BOOST_VERSION} as mevboost
 
 # install fresh haproxy (debian stock version is buggy)
 FROM bitnami/minideb:${DEBIAN_RELEASE} as haproxy
-ENV HAPROXY_SHA256="f94f6bc3e565a87d4248b82342d30b1e9815f731cd8fa8b912c4e686b16a3e9a"
+ENV HAPROXY_SHA256="82d2e64f5537506e49a8ebbde87d6317470fdec0cf288a02b726b8f05788c64d"
 
 RUN install_packages curl ca-certificates liblua5.3-0 libopentracing-c-wrapper0
 RUN cd /tmp && \
-  curl -L https://launchpad.net/~vbernat/+archive/ubuntu/haproxy-2.8/+files/haproxy_2.8.0-1ppa1~jammy_amd64.deb -o /tmp/haproxy.deb \
+  curl -L https://ppa.launchpadcontent.net/vbernat/haproxy-2.8/ubuntu/pool/main/h/haproxy/haproxy_2.8.1-1ppa1~jammy_amd64.deb -o /tmp/haproxy.deb \
   && echo "${HAPROXY_SHA256} /tmp/haproxy.deb" | sha256sum -c \
   && dpkg -i /tmp/haproxy.deb
 

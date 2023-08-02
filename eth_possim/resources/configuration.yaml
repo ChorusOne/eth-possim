@@ -1,14 +1,12 @@
 port:
   # EL
   geth_rpc: 18544
-  geth_wsrpc: 8546
-  explorer_el: 4000
+  geth_wsrpc: 18545
 
   #CL
   beacon_api: 15050
   lh_api: 15151
   teku_api: 15051
-  explorer_cl: 4001
 
   # Others
   deposit: 9009
@@ -22,7 +20,7 @@ el:
   bootnode_key: 02fd74636e96a8ffac8e7b01b0de8dea94d6bcf4989513b38cf59eb32163ff91
   # bootnode -nodekeyhex 02fd74636e96a8ffac8e7b01b0de8dea94d6bcf4989513b38cf59eb32163ff91 -writeaddres
   bootnode_enode: 51ea9bb34d31efc3491a842ed13b8cab70e753af108526b57916d716978b380ed713f4336a80cdb85ec2a115d5a8c0ae9f3247bed3c84d3cb025c6bab311062c
-  
+
   verbosity: 3
 
   funder:
