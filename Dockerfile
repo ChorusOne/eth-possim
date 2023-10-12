@@ -23,12 +23,12 @@
 ARG DEBIAN_RELEASE="bookworm"
 
 # Lighthouse testnet bakery helper
-ARG LCLI_VERSION="4.2.0"
+ARG LCLI_VERSION="4.5.0"
 
 # Ethereum clients
-ARG GETH_VERSION="1.12.0"
-ARG LIGHTHOUSE_VERSION="4.2.0"
-ARG TEKU_VERSION="23.6.0"
+ARG GETH_VERSION="1.13.2"
+ARG LIGHTHOUSE_VERSION="4.5.0"
+ARG TEKU_VERSION="23.10.0"
 ARG MEV_BOOST_VERSION="1.6"
 
 # prysm image
@@ -38,7 +38,7 @@ FROM bitnami/minideb:${DEBIAN_RELEASE} AS prysmbuilder
 ARG BAZELISK_VERSION="1.17.0"
 ARG BAZELISK_SHA256="61699e22abb2a26304edfa1376f65ad24191f94a4ffed68a58d42b6fee01e124"
 
-ARG PRYSM_REF="refs/tags/v4.0.6"
+ARG PRYSM_REF="refs/tags/v4.0.8"
 
 ENV BAZELISK_VERSION="${BAZELISK_VERSION}"
 ENV PRYSM_REF="${PRYSM_REF}"
@@ -147,11 +147,11 @@ FROM flashbots/mev-boost:${MEV_BOOST_VERSION} as mevboost
 
 # install fresh haproxy (debian stock version is buggy)
 FROM bitnami/minideb:${DEBIAN_RELEASE} as haproxy
-ENV HAPROXY_SHA256="82d2e64f5537506e49a8ebbde87d6317470fdec0cf288a02b726b8f05788c64d"
+ENV HAPROXY_SHA256="e02ad19aa2a1c76d019ace4cfc937781cc3368cc3f144ea62be5e151456c5ba1"
 
 RUN install_packages curl ca-certificates liblua5.3-0 libopentracing-c-wrapper0
 RUN cd /tmp && \
-  curl -L https://ppa.launchpadcontent.net/vbernat/haproxy-2.8/ubuntu/pool/main/h/haproxy/haproxy_2.8.1-1ppa1~jammy_amd64.deb -o /tmp/haproxy.deb \
+  curl -L https://launchpad.net/~vbernat/+archive/ubuntu/haproxy-2.8/+files/haproxy_2.8.3-1ppa1~jammy_amd64.deb -o /tmp/haproxy.deb \
   && echo "${HAPROXY_SHA256} /tmp/haproxy.deb" | sha256sum -c \
   && dpkg -i /tmp/haproxy.deb
 
