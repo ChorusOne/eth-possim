@@ -149,7 +149,7 @@ FROM flashbots/mev-boost:${MEV_BOOST_VERSION} as mevboost
 FROM bitnami/minideb:${DEBIAN_RELEASE} as haproxy
 ENV HAPROXY_SHA256="0d70dc7da3d004d3c4b7f2dffa539faebd307e2726b82533957c3ac6003e88fc"
 
-RUN install_packages curl ca-certificates liblua5.3-0 libopentracing-c-wrapper0
+RUN install_packages libjemalloc2 curl ca-certificates liblua5.3-0 libopentracing-c-wrapper0
 RUN cd /tmp && \
   curl -L https://launchpad.net/~vbernat/+archive/ubuntu/haproxy-2.8/+files/haproxy_2.8.5-1ppa1~jammy_amd64.deb -o /tmp/haproxy.deb \
   && echo "${HAPROXY_SHA256} /tmp/haproxy.deb" | sha256sum -c \
