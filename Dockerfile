@@ -146,14 +146,7 @@ FROM consensys/teku:${TEKU_VERSION}-jdk17 as teku
 FROM flashbots/mev-boost:${MEV_BOOST_VERSION} as mevboost
 
 # install fresh haproxy (debian stock version is buggy)
-FROM bitnami/minideb:${DEBIAN_RELEASE} as haproxy
-ENV HAPROXY_SHA256="0d70dc7da3d004d3c4b7f2dffa539faebd307e2726b82533957c3ac6003e88fc"
-
-RUN install_packages libjemalloc2 curl ca-certificates liblua5.3-0 libopentracing-c-wrapper0
-RUN cd /tmp && \
-  curl -L https://launchpad.net/~vbernat/+archive/ubuntu/haproxy-2.8/+files/haproxy_2.8.5-1ppa1~jammy_amd64.deb -o /tmp/haproxy.deb \
-  && echo "${HAPROXY_SHA256} /tmp/haproxy.deb" | sha256sum -c \
-  && dpkg -i /tmp/haproxy.deb
+FROM haproxy:2.8-bookworm AS haproxy
 
 # ============= MAIN IMAGE ================
 FROM bitnami/minideb:${DEBIAN_RELEASE} AS builder
@@ -197,7 +190,7 @@ COPY --from=mevboost /app/mev-boost /usr/local/bin/mev-boost
 COPY --from=ethodbuilder /usr/local/src/ethdo/ethdo /usr/local/bin/ethdo
 
 # Copy haproxy
-COPY --from=haproxy /usr/sbin/haproxy /usr/local/bin/haproxy
+COPY --from=haproxy /usr/local/sbin/haproxy /usr/local/bin/haproxy
 
 WORKDIR /opt/privatenet
 RUN python3 -m venv venv
