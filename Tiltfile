@@ -102,8 +102,9 @@ local_resource(
 local_resource(
     "deploy-fee-manager-contracts",
     cmd="python3 -m eth_possim deploy-fee-manager-contracts",
-    deps=["deploy-deposit-contract"] + lh_beacon_nodes,
-    allow_parallel=False,
+    deps=lh_beacon_nodes,
+    resource_deps=["deploy-deposit-contract"],
+    allow_parallel=True,
 )
 
 # Deploy validator nodes
