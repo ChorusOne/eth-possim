@@ -98,6 +98,15 @@ local_resource(
     allow_parallel=True,
 )
 
+# Deploy fee manager library and main contract.
+local_resource(
+    "deploy-fee-manager-contracts",
+    cmd="python3 -m eth_possim deploy-fee-manager-contracts",
+    deps=lh_beacon_nodes,
+    resource_deps=["deploy-deposit-contract"],
+    allow_parallel=True,
+)
+
 # Deploy validator nodes
 for idx in range(cfg["cl"]["lh_node_count"]):
     node_name = "val-lh-{}".format(idx)
