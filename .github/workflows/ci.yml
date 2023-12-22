@@ -16,8 +16,8 @@ jobs:
 
       - name: Build Ethereum PoS simulator
         run: |
-          docker-compose build possim
+          docker compose build possim
 
       - name: Run Ethereum PoS test suite
         run: |
-          docker-compose run possim test
+          docker compose run possim test

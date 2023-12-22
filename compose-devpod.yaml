@@ -1,0 +1,34 @@
+# this compose file is written and invoked using the guidelines defined here:
+# https://github.com/ChorusOne/hopper-build-container/blob/main/docker.md
+# so that the project can be run in all docker-outside-of-docker environments
+# (devpod, github ci, cloud build, etc)
+networks:
+  default:
+    external: true
+    name: ${POSSIM_DOCKER_NETWORK:-${C1_DOCKER_NETWORK}}
+
+services:
+  possim:
+    extends:
+      file: compose.yaml
+      service: possim
+    networks:
+      default:
+        aliases:
+          # use an alias with a .devel tld to avoid DNS resolution
+          # normally we'd just use the `container-name.` hostname, but the container_name
+          # is ignored when running using docker compose run command
+          - ${POSSIM_HOSTNAME}
+    expose:
+      # execution wsrpc
+      - "18546"
+      # execution rpc
+      - "18544"
+      # beacon rest
+      - "15050"
+      # beacon teku
+      - "15051"
+      # beacon lighthouse
+      - "15151"
+      # mev relay
+      - "38000"

@@ -1,0 +1,12 @@
+services:
+  possim:
+    build: .
+    volumes:
+      - ${POSSIM_BINDMOUNT_PATH:-.}/eth_possim:/opt/privatenet/eth_possim:ro
+      - ${POSSIM_BINDMOUNT_PATH:-.}/Tiltfile:/opt/privatenet/Tiltfile:ro
+      - ${POSSIM_BINDMOUNT_PATH:-.}/Makefile:/opt/privatenet/Makefile:ro
+      - ${POSSIM_BINDMOUNT_PATH:-.}/.data:/opt/privatenet/.data:rw
+      - ${POSSIM_BINDMOUNT_PATH:-.}/tests:/opt/privatenet/tests
+      - ${POSSIM_BINDMOUNT_PATH:-.}/requirements-dev.txt:/opt/privatenet/requirements-dev.txt
+      - ${POSSIM_BINDMOUNT_PATH:-.}/pbs_config.yaml:/opt/privatenet/pbs_config.yaml
+    command: freshrun
