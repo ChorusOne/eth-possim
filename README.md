@@ -66,7 +66,7 @@ Once you've set up your env you can get the privatenet up and running using:
 
 ```bash
 docker compose build possim
-docker compose run --use-aliases possim
+docker compose run --use-aliases --rm possim
 ```
 
 Once running, you can connect using:
@@ -79,7 +79,7 @@ curl -v http://$POSSIM_HOSTNAME:15050
 To run with overridden config:
 
 ```bash
-docker compose run --use-aliases possim CONFIG=/opt/privatenet/pbs_config.yaml
+docker compose run --use-aliases --rm possim CONFIG=/opt/privatenet/pbs_config.yaml
 ```
 
 See [configuration.yaml](./eth_possim/resources/configuration.yaml) for the default values.
@@ -87,7 +87,7 @@ See [configuration.yaml](./eth_possim/resources/configuration.yaml) for the defa
 How to test
 -----------
 ```bash
-docker compose run possim test
+docker compose run --rm possim test
 ```
 
 How it works inside the container
