@@ -1,0 +1,18 @@
+services:
+  possim:
+    extends:
+      file: compose.yaml
+      service: possim  
+    ports:
+      # execution wsrpc
+      - "18546:18546"
+      # execution rpc
+      - "18544:18544"
+      # beacon rest
+      - "15050:15050"
+      # beacon teku
+      - "15051:15051"
+      # beacon lighthouse
+      - "15151:15151"
+      # mev relay
+      - "38000:38000"
