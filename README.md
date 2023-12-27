@@ -54,7 +54,7 @@ echo "COMPOSE_FILE=compose-devpod.yaml" > .env
 echo "COMPOSE_PROJECT_NAME=${C1_DOCKER_NAMESPACE}-possim" >> .env
 echo "POSSIM_DOCKER_NETWORK=${C1_DOCKER_NETWORK}" >> .env
 echo "POSSIM_BINDMOUNT_PATH=$(host-path-outside-of-docker.sh .)" >> .env
-echo "POSSIM_HOSTNAME=${C1_DOCKER_NAMESPACE}-possim.devel" >> .env
+echo "POSSIM_HOSTNAME=possim.devel" >> .env
 ```
 * otherwise for linux host networking configuration run: 
 ```bash
