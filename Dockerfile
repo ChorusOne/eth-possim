@@ -23,13 +23,13 @@
 ARG DEBIAN_RELEASE="bookworm"
 
 # Lighthouse testnet bakery helper
-ARG LCLI_VERSION="4.5.0"
+ARG LCLI_VERSION="4.6.0-rc.0"
 
 # Ethereum clients
-ARG GETH_VERSION="1.13.2"
-ARG LIGHTHOUSE_VERSION="4.5.0"
-ARG TEKU_VERSION="23.10.0"
-ARG MEV_BOOST_VERSION="1.6"
+ARG GETH_VERSION="1.13.10"
+ARG LIGHTHOUSE_VERSION="4.6.0-rc.0"
+ARG TEKU_VERSION="24.1.0"
+ARG MEV_BOOST_VERSION="1.7a1"
 
 # prysm image
 FROM bitnami/minideb:${DEBIAN_RELEASE} AS prysmbuilder
@@ -38,7 +38,7 @@ FROM bitnami/minideb:${DEBIAN_RELEASE} AS prysmbuilder
 ARG BAZELISK_VERSION="1.17.0"
 ARG BAZELISK_SHA256="61699e22abb2a26304edfa1376f65ad24191f94a4ffed68a58d42b6fee01e124"
 
-ARG PRYSM_REF="refs/tags/v4.0.8"
+ARG PRYSM_REF="refs/tags/v4.2.0"
 
 ENV BAZELISK_VERSION="${BAZELISK_VERSION}"
 ENV PRYSM_REF="${PRYSM_REF}"
@@ -62,7 +62,7 @@ RUN find -L /usr/local/prysm
 
 # builder and relay
 FROM bitnami/minideb:${DEBIAN_RELEASE} AS mevbuilder
-ARG FLASHBOTS_BUILDER_REF="v1.11.5-0.2.1"
+ARG FLASHBOTS_BUILDER_REF="b2dcbddfb1c81b1c20f0870d6fca414b9016433b"
 ARG MAINIFOLD_FREELAY_REF="support-privatenet"
 ENV GO_1_20_SHA256="5a9ebcc65c1cce56e0d2dc616aff4c4cedcfbda8cc6f0288cc08cda3b18dcbf1"
 
@@ -93,7 +93,7 @@ RUN PATH="/usr/local/go/bin/:$PATH" go run build/ci.go install -static ./cmd/get
 FROM bitnami/minideb:${DEBIAN_RELEASE} AS genesisbuilder
 # Testnet baking accessories
 ARG ZCLI_REF="refs/tags/v0.6.0"
-ARG ETH2_TESTNET_GENESIS_REF="refs/tags/v0.8.0"
+ARG ETH2_TESTNET_GENESIS_REF="955d4a81095c019dd712ba96316c426330133240"
 ENV GO_1_19_SHA256="464b6b66591f6cf055bc5df90a9750bf5fbc9d038722bb84a9d56a2bea974be6"
 ENV ZCLI_REF="${ZCLI_REF}"
 ENV ETH2_TESTNET_GENESIS_REF="${ETH2_TESTNET_GENESIS_REF}"
@@ -111,7 +111,7 @@ RUN git clone https://github.com/protolambda/zcli.git && cd zcli && git fetch or
 RUN cd zcli && PATH="/usr/local/go/bin/:$PATH" go build
 
 # Build genesis tool
-RUN git clone https://github.com/protolambda/eth2-testnet-genesis.git && cd eth2-testnet-genesis && git fetch origin "${ETH2_TESTNET_GENESIS_REF}" && git checkout "${ETH2_TESTNET_GENESIS_REF}"
+RUN git clone https://github.com/pk910/eth2-testnet-genesis.git && cd eth2-testnet-genesis && git fetch origin "${ETH2_TESTNET_GENESIS_REF}" && git checkout "${ETH2_TESTNET_GENESIS_REF}"
 RUN cd eth2-testnet-genesis && PATH="/usr/local/go/bin/:$PATH" go build
 
 # builder and relay
