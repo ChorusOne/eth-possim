@@ -2,10 +2,9 @@
 
 set -euxo pipefail
 
-# Generate post-merge (Capella-enabled) genesis
+# Generate Deneb genesis
 genesis_args=(
     deneb
-    --legacy-config {{ cfg.meta.dir.cl }}/etc/config-prysm.yaml
     --config {{ cfg.meta.dir.cl }}/etc/config-prysm.yaml
     --mnemonics {{ cfg.meta.dir.cl }}/etc/mnemonics.yaml
     --tranches-dir {{ cfg.meta.dir.cl }}/etc/tranches

@@ -11,7 +11,8 @@ PRESET_BASE: 'minimal'
 # * 'mainnet' - there can be only one
 # * 'prater' - testnet
 # Must match the regex: [a-z0-9\-]
-CONFIG_NAME: 'minimal'
+# CONFIG_NAME: 'minimal'
+# read from privatenet.yaml
 
 # Transition
 # ---------------------------------------------------------------

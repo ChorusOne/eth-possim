@@ -20,7 +20,11 @@ from eth_possim.deposit import call_batch_deposit_contract
 def tilt_up():
     os.system("killall -9 geth tilt bootnode haproxy java lighthouse")
 
-    p = subprocess.Popen("make freshrun CONFIG=/opt/privatenet/pbs_config.yaml", shell=True, stdout=subprocess.PIPE)
+    p = subprocess.Popen(
+        "make freshrun CONFIG=/opt/privatenet/pbs_config.yaml",
+        shell=True,
+        stdout=subprocess.PIPE,
+    )
 
     # Wait some time to delete non-PBS privatenet data.
     time.sleep(2)
@@ -36,7 +40,6 @@ def tilt_up():
         cfg = yaml.safe_load(f)
     yield cfg
     p.kill()
-
 
 
 def beacon_url(cfg):
@@ -155,14 +158,70 @@ def test_validator_exited(tilt_up):
     with open(f"{os.path.dirname(__file__)}/deposit_data.json") as f:
         deposit_data = json.load(f)
 
-    # Send exits
-    for i, private_key in enumerate(deposit_data["private_keys"]):
+    # Offline preparation is necessary, since
+    # ethdo does not support minimal beacon spec, making it unable
+    # to read necessary beacon data due to ssz encoding mismatches
+    beacon_genesis_data = requests.get(f"{base_url}/eth/v1/beacon/genesis").json()
+    beacon_fork_data = requests.get(f"{base_url}/eth/v1/beacon/states/head/fork").json()
+    beacon_spec = requests.get(f"{base_url}/eth/v1/config/spec").json()
+
+    # Fork version: honor EIP-7044
+    current_fork_version = beacon_fork_data["data"]["current_version"]
+    if current_fork_version >= beacon_spec["data"]["DENEB_FORK_VERSION"]:
+        exit_fork_version = beacon_spec["data"]["CAPELLA_FORK_VERSION"]
+    else:
+        exit_fork_version = current_fork_version
+    voluntary_exit_domain = beacon_spec["data"]["DOMAIN_VOLUNTARY_EXIT"]
+    bls_to_execution_change_domain = beacon_spec["data"]["DOMAIN_BEACON_PROPOSER"]
+
+    chain_preparation_data = {
+        "version": "3",
+        "validators": [],
+        "genesis_validators_root": beacon_genesis_data["data"][
+            "genesis_validators_root"
+        ],
+        "genesis_fork_version": beacon_genesis_data["data"]["genesis_fork_version"],
+        "epoch": beacon_fork_data["data"]["epoch"],
+        "exit_fork_version": exit_fork_version,
+        "current_fork_version": current_fork_version,
+        "voluntary_exit_domain_type": voluntary_exit_domain,
+        "bls_to_execution_change_domain_type": bls_to_execution_change_domain,
+    }
+    for i, _ in enumerate(deposit_data["private_keys"]):
+        pubkey = deposit_data["deposit_data"][i]["pubkey"]
+        validator_data = requests.get(
+            f"{base_url}/eth/v1/beacon/states/head/validators/0x{pubkey}"
+        ).json()
+        chain_preparation_data["validators"].append(
+            {
+                "index": validator_data["data"]["index"],
+                "withdrawal_credentials": validator_data["data"]["validator"][
+                    "withdrawal_credentials"
+                ],
+                "pubkey": pubkey,
+                "state": validator_data["data"]["status"],
+            }
+        )
+    with open("offline-preparation.json", "w") as opf:
+        opf.write(json.dumps(chain_preparation_data))
+
+    mnemonic = deposit_data["mnemonic"]["seed"]
+    for i, _ in enumerate(deposit_data["private_keys"]):
+        pubkey = deposit_data["deposit_data"][i]["pubkey"]
+        index = chain_preparation_data["validators"][i]["index"]
         subprocess.check_call(
             shlex.split(
-                f"ethdo validator exit --private-key 0x{private_key}  --connection {base_url}"
-            )
+                f'ethdo validator exit --mnemonic "{mnemonic}" --validator {index} --public-key {pubkey}  --connection {base_url} --allow-insecure-connections --offline '
+            ),
         )
-        print(f"Sent exit to validator #{33 + i}")
+        with open("exit-operations.json", "r") as f:
+            exit_data = f.read()
+            exit = json.loads(exit_data)
+        print(f"Prepared exit for validator #{index}")
+        response = requests.post(
+            f"{base_url}/eth/v1/beacon/pool/voluntary_exits", json=exit
+        )
+        print(f"Exit status: {response.status_code}")
 
     # Wait until validators become exited
     while True:
