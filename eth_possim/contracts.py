@@ -12,7 +12,7 @@ from web3.types import TxReceipt, HexStr
 logger = logging.getLogger(__name__)
 
 def wait_for_transaction_receipt(w3: web3.Web3, signed_txn_hash: HexStr) -> TxReceipt:
-    for _ in range(1, 10):
+    for _ in range(1, 100):
         try:
             tx_receipt = w3.eth.wait_for_transaction_receipt(signed_txn_hash)
             return tx_receipt
