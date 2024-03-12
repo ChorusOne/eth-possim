@@ -73,6 +73,7 @@ def deploy_batch_deposit_contract(rpc: str):
     with open("./.data/configuration.yaml", "w") as f:
         yaml.dump(cfg, f)
 
+
 @cli.command()
 @click.option("--rpc", help="RPC endpoint URL address.", default="")
 def deploy_fee_manager_contracts(rpc: str):
@@ -97,20 +98,30 @@ def deploy_fee_manager_contracts(rpc: str):
         rpc=rpc,
         foundry_json_path=f"{cfg['resources']}/ethereum_compiled_contracts/FeeRewardsManager.json",
         args=[2800],
-        libraries=[("__$c56d76a1417c078a963cba4fa22c45184c$__", fee_manager_library_address)]
+        libraries=[
+            ("__$c56d76a1417c078a963cba4fa22c45184c$__", fee_manager_library_address)
+        ],
     )
     cfg["cl"]["fee_manager_address"] = fee_manager_address
 
     with open("./.data/configuration.yaml", "w") as f:
         yaml.dump(cfg, f)
 
+
 @cli.command()
 @click.option("--rpc", help="RPC endpoint URL address.", default="")
 @click.option("--path", help="Path to the contract source.")
 @click.option("--cfg-key-address", help="Key in which to save the contract address.")
-@click.option("--library", multiple=True, type=(str, str), help="Libraries to be replaced in the bytecode contract in the format key value")
+@click.option(
+    "--library",
+    multiple=True,
+    type=(str, str),
+    help="Libraries to be replaced in the bytecode contract in the format key value",
+)
 @click.argument("args", nargs=-1)
-def deploy_contract_bytecode(rpc: str, path: str, cfg_key_address: str, args: list, library: list):
+def deploy_contract_bytecode(
+    rpc: str, path: str, cfg_key_address: str, args: list, library: list
+):
     """Deploys a contract by the compiled bytecode and abi."""
 
     with open("./.data/configuration.yaml", "r") as f:
@@ -118,12 +129,15 @@ def deploy_contract_bytecode(rpc: str, path: str, cfg_key_address: str, args: li
     if not rpc:
         rpc = f"http://localhost:{cfg['haproxy']['el']['port_geth_rpc']}"
 
-    contract_address = deploy_compiled_contract(cfg=cfg, rpc=rpc, foundry_json_path=path, args=args, libraries=library)
+    contract_address = deploy_compiled_contract(
+        cfg=cfg, rpc=rpc, foundry_json_path=path, args=args, libraries=library
+    )
 
     # Patch and write back `configuration.yaml`
     cfg["cl"][cfg_key_address] = contract_address
     with open("./.data/configuration.yaml", "w") as f:
         yaml.dump(cfg, f)
+
 
 @cli.command()
 @click.option("--rpc", help="RPC endpoint URL address.", default="")

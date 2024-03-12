@@ -2,10 +2,9 @@
 
 set -euxo pipefail
 
-# Generate post-merge (Capella-enabled) genesis
+# Generate Deneb genesis
 genesis_args=(
-    capella
-    --legacy-config {{ cfg.meta.dir.cl }}/etc/config-prysm.yaml
+    deneb
     --config {{ cfg.meta.dir.cl }}/etc/config-prysm.yaml
     --mnemonics {{ cfg.meta.dir.cl }}/etc/mnemonics.yaml
     --tranches-dir {{ cfg.meta.dir.cl }}/etc/tranches
@@ -20,7 +19,7 @@ genesis_args=(
 )
 
 pretty_args=(
-    capella
+    deneb
     BeaconState
     --config {{ cfg.meta.dir.cl }}/etc/config-prysm.yaml
     --preset-phase0 minimal

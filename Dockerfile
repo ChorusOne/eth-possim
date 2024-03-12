@@ -23,13 +23,13 @@
 ARG DEBIAN_RELEASE="bookworm"
 
 # Lighthouse testnet bakery helper
-ARG LCLI_VERSION="4.5.0"
+ARG LCLI_VERSION="5.0.0"
 
 # Ethereum clients
-ARG GETH_VERSION="1.13.2"
-ARG LIGHTHOUSE_VERSION="4.5.0"
-ARG TEKU_VERSION="23.10.0"
-ARG MEV_BOOST_VERSION="1.6"
+ARG GETH_VERSION="1.13.13"
+ARG LIGHTHOUSE_VERSION="5.0.0"
+ARG TEKU_VERSION="24.2.0"
+ARG MEV_BOOST_VERSION="1.7a1"
 
 # prysm image
 FROM bitnami/minideb:${DEBIAN_RELEASE} AS prysmbuilder
@@ -38,7 +38,7 @@ FROM bitnami/minideb:${DEBIAN_RELEASE} AS prysmbuilder
 ARG BAZELISK_VERSION="1.17.0"
 ARG BAZELISK_SHA256="61699e22abb2a26304edfa1376f65ad24191f94a4ffed68a58d42b6fee01e124"
 
-ARG PRYSM_REF="refs/tags/v4.0.8"
+ARG PRYSM_REF="refs/tags/v4.2.0"
 
 ENV BAZELISK_VERSION="${BAZELISK_VERSION}"
 ENV PRYSM_REF="${PRYSM_REF}"
@@ -62,7 +62,7 @@ RUN find -L /usr/local/prysm
 
 # builder and relay
 FROM bitnami/minideb:${DEBIAN_RELEASE} AS mevbuilder
-ARG FLASHBOTS_BUILDER_REF="v1.11.5-0.2.1"
+ARG FLASHBOTS_BUILDER_REF="7845c515c32ef08f15c420fda0f5de4f2e6800cd"
 ARG MAINIFOLD_FREELAY_REF="support-privatenet"
 ENV GO_1_20_SHA256="5a9ebcc65c1cce56e0d2dc616aff4c4cedcfbda8cc6f0288cc08cda3b18dcbf1"
 
@@ -92,9 +92,9 @@ RUN PATH="/usr/local/go/bin/:$PATH" go run build/ci.go install -static ./cmd/get
 # genesis & zcli tools
 FROM bitnami/minideb:${DEBIAN_RELEASE} AS genesisbuilder
 # Testnet baking accessories
-ARG ZCLI_REF="refs/tags/v0.6.0"
-ARG ETH2_TESTNET_GENESIS_REF="refs/tags/v0.8.0"
-ENV GO_1_19_SHA256="464b6b66591f6cf055bc5df90a9750bf5fbc9d038722bb84a9d56a2bea974be6"
+ARG ZCLI_REF="refs/tags/v0.7.1"
+ARG ETH2_TESTNET_GENESIS_REF="4b3498476f14b872b43080eee319adea45286daf"
+ENV GO_1_21_SHA256="13b76a9b2a26823e53062fa841b07087d48ae2ef2936445dc34c4ae03293702c"
 ENV ZCLI_REF="${ZCLI_REF}"
 ENV ETH2_TESTNET_GENESIS_REF="${ETH2_TESTNET_GENESIS_REF}"
 WORKDIR /usr/local/src/
@@ -102,9 +102,9 @@ WORKDIR /usr/local/src/
 RUN install_packages curl ca-certificates git build-essential
 
 # Install golang
-RUN cd /tmp && curl -OL https://golang.org/dl/go1.19.linux-amd64.tar.gz
-RUN echo "${GO_1_19_SHA256} /tmp/go1.19.linux-amd64.tar.gz" | sha256sum -c
-RUN cd /tmp && tar -C /usr/local -xvf go1.19.linux-amd64.tar.gz
+RUN cd /tmp && curl -OL https://golang.org/dl/go1.21.7.linux-amd64.tar.gz
+RUN echo "${GO_1_21_SHA256} /tmp/go1.21.7.linux-amd64.tar.gz" | sha256sum -c
+RUN cd /tmp && tar -C /usr/local -xvf go1.21.7.linux-amd64.tar.gz
 
 # Build zcli
 RUN git clone https://github.com/protolambda/zcli.git && cd zcli && git fetch origin "${ZCLI_REF}" && git checkout "${ZCLI_REF}"
@@ -116,7 +116,7 @@ RUN cd eth2-testnet-genesis && PATH="/usr/local/go/bin/:$PATH" go build
 
 # builder and relay
 FROM bitnami/minideb:${DEBIAN_RELEASE} AS ethodbuilder
-ARG ETHDO_REF="v1.31.0"
+ARG ETHDO_REF="5895bbfbe6484505ddf666f0f4c0e25dde3cce9b"
 ENV GO_1_20_SHA256="5a9ebcc65c1cce56e0d2dc616aff4c4cedcfbda8cc6f0288cc08cda3b18dcbf1"
 
 RUN install_packages curl ca-certificates git build-essential
@@ -126,7 +126,7 @@ RUN echo "${GO_1_20_SHA256} /tmp/go1.20.linux-amd64.tar.gz" | sha256sum -c
 RUN cd /tmp && tar -C /usr/local -xvf go1.20.linux-amd64.tar.gz
 
 WORKDIR /usr/local/src/
-RUN git clone https://github.com/wealdtech/ethdo.git && cd ethdo && git fetch origin "${ETHDO_REF}" && git checkout "${ETHDO_REF}"
+RUN git clone https://github.com/ChorusOne/ethdo.git && cd ethdo && git fetch origin "${ETHDO_REF}" && git checkout "${ETHDO_REF}"
 RUN cd ethdo && PATH="/usr/local/go/bin/:$PATH" go mod download
 RUN cd ethdo && PATH="/usr/local/go/bin/:$PATH" go build
 

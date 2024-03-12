@@ -4,21 +4,44 @@ import logging
 import solcx
 import web3
 import re
+import time
 from typing import List, Tuple
+from web3.types import TxReceipt, HexStr
 
 
 logger = logging.getLogger(__name__)
 
-def deploy_compiled_contract(cfg: dict, rpc: str, foundry_json_path: str, args: list = [], libraries: List[Tuple[str, str]]  = []) -> str:
+def wait_for_transaction_receipt(w3: web3.Web3, signed_txn_hash: HexStr) -> TxReceipt:
+    for _ in range(1, 100):
+        try:
+            tx_receipt = w3.eth.wait_for_transaction_receipt(signed_txn_hash)
+            return tx_receipt
+        except ValueError as exc:
+            if exc.args[0]["message"] == "transaction indexing is in progress":
+                logger.info(
+                    "Failed to get transaction receipt due to indexing, will retry"
+                )
+                time.sleep(5)
+                continue
+            else:
+                raise
+
+def deploy_compiled_contract(
+    cfg: dict,
+    rpc: str,
+    foundry_json_path: str,
+    args: list = [],
+    libraries: List[Tuple[str, str]] = [],
+) -> str:
     with open(foundry_json_path, "r") as f:
         foundry_json = json.loads(f.read())
-    
+
     bytecode_str = foundry_json["bytecode"]["object"][2:]
     for library in libraries:
         # Skip 0x from the library address.
-       bytecode_str = bytecode_str.replace(library[0], library[1][2:])
+        bytecode_str = bytecode_str.replace(library[0], library[1][2:])
     bytecode = binascii.unhexlify(bytecode_str)
-        
+
     abi = foundry_json["abi"]
 
     w3 = web3.Web3(web3.Web3.HTTPProvider(rpc))
@@ -46,13 +69,11 @@ def deploy_compiled_contract(cfg: dict, rpc: str, foundry_json_path: str, args: 
         private_key=cfg["el"]["funder"]["private_key"],
     )
     w3.eth.send_raw_transaction(signed_txn.rawTransaction)
-    tx_receipt = w3.eth.wait_for_transaction_receipt(signed_txn.hash)
 
-    logger.info(
-        f"Contract from '{foundry_json_path}' was published at address '{tx_receipt['contractAddress']}' [block: {tx_receipt['blockNumber']}]"
-    )
-
+    tx_receipt = wait_for_transaction_receipt(w3, signed_txn.hash)
+    logger.info(f"Contract from '{foundry_json_path}' was published at address '{tx_receipt['contractAddress']}' [block: {tx_receipt['blockNumber']}]")
     return tx_receipt["contractAddress"]
+
 
 def deploy_contract_onchain(
     cfg: dict, rpc: str, path: str, name: str, args: list = []
@@ -96,7 +117,7 @@ def deploy_contract_onchain(
         private_key=cfg["el"]["funder"]["private_key"],
     )
     w3.eth.send_raw_transaction(signed_txn.rawTransaction)
-    tx_receipt = w3.eth.wait_for_transaction_receipt(signed_txn.hash)
+    tx_receipt = wait_for_transaction_receipt(w3, signed_txn.hash)
 
     logger.info(
         f"Contract from '{path}' was published at address '{tx_receipt['contractAddress']}' [block: {tx_receipt['blockNumber']}]"
